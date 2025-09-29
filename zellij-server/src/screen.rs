@@ -745,6 +745,7 @@ pub(crate) struct Screen {
     web_sharing: WebSharing,
     current_pane_group: Rc<RefCell<PaneGroups>>,
     advanced_mouse_actions: bool,
+    auto_focus_on_hover: bool,
     currently_marking_pane_group: Rc<RefCell<HashMap<ClientId, bool>>>,
     // the below are the configured values - the ones that will be set if and when the web server
     // is brought online
@@ -779,6 +780,7 @@ impl Screen {
         web_clients_allowed: bool,
         web_sharing: WebSharing,
         advanced_mouse_actions: bool,
+        auto_focus_on_hover: bool,
         web_server_ip: IpAddr,
         web_server_port: u16,
     ) -> Self {
@@ -830,6 +832,7 @@ impl Screen {
             current_pane_group: Rc::new(RefCell::new(current_pane_group)),
             currently_marking_pane_group: Rc::new(RefCell::new(HashMap::new())),
             advanced_mouse_actions,
+            auto_focus_on_hover,
             web_server_ip,
             web_server_port,
         }
@@ -1466,6 +1469,7 @@ impl Screen {
             self.current_pane_group.clone(),
             self.currently_marking_pane_group.clone(),
             self.advanced_mouse_actions,
+            self.auto_focus_on_hover,
             self.web_server_ip,
             self.web_server_port,
         );
@@ -3268,6 +3272,7 @@ pub(crate) fn screen_thread_main(
         .unwrap_or(false);
     let web_sharing = config_options.web_sharing.unwrap_or_else(Default::default);
     let advanced_mouse_actions = config_options.advanced_mouse_actions.unwrap_or(true);
+    let auto_focus_on_hover = config_options.auto_focus_on_hover.unwrap_or(false);
 
     let thread_senders = bus.senders.clone();
     let mut screen = Screen::new(
@@ -3304,6 +3309,7 @@ pub(crate) fn screen_thread_main(
         web_clients_allowed,
         web_sharing,
         advanced_mouse_actions,
+        auto_focus_on_hover,
         web_server_ip,
         web_server_port,
     );

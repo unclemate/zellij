@@ -269,6 +269,8 @@ pub(crate) struct Tab {
     mouse_hover_pane_id: HashMap<ClientId, PaneId>,
     current_pane_group: Rc<RefCell<PaneGroups>>,
     advanced_mouse_actions: bool,
+    auto_focus_on_hover: bool,
+    last_hover_time: HashMap<ClientId, Instant>,
     currently_marking_pane_group: Rc<RefCell<HashMap<ClientId, bool>>>,
     connected_clients_in_app: Rc<RefCell<HashMap<ClientId, bool>>>, // bool -> is_web_client
     // the below are the configured values - the ones that will be set if and when the web server
@@ -694,6 +696,7 @@ impl Tab {
         current_pane_group: Rc<RefCell<PaneGroups>>,
         currently_marking_pane_group: Rc<RefCell<HashMap<ClientId, bool>>>,
         advanced_mouse_actions: bool,
+        auto_focus_on_hover: bool,
         web_server_ip: IpAddr,
         web_server_port: u16,
     ) -> Self {
@@ -796,6 +799,8 @@ impl Tab {
             current_pane_group,
             currently_marking_pane_group,
             advanced_mouse_actions,
+            auto_focus_on_hover,
+            last_hover_time: HashMap::new(),
             connected_clients_in_app,
             web_server_ip,
             web_server_port,
@@ -4407,6 +4412,21 @@ impl Tab {
                     self.mouse_hover_pane_id.insert(client_id, pane_id);
                 } else if self.advanced_mouse_actions {
                     self.mouse_hover_pane_id.remove(&client_id);
+                }
+
+                // Auto-focus pane on hover if enabled
+                if self.auto_focus_on_hover && pane_is_selectable && pane_id != active_pane_id {
+                    const DEBOUNCE_DURATION_MS: u64 = 100; // 100ms debounce
+                    let now = Instant::now();
+                    let should_focus = self.last_hover_time.get(&client_id)
+                        .map_or(true, |last_time| {
+                            now.duration_since(*last_time).as_millis() >= DEBOUNCE_DURATION_MS as u128
+                        });
+
+                    if should_focus {
+                        self.focus_pane_with_id(pane_id, false, client_id)?;
+                        self.last_hover_time.insert(client_id, now);
+                    }
                 }
             }
         };

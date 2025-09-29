@@ -220,6 +220,12 @@ pub struct Options {
     #[serde(default)]
     pub advanced_mouse_actions: Option<bool>,
 
+    /// Whether to automatically focus pane when hovering over it with mouse
+    /// default is false
+    #[clap(long, value_parser)]
+    #[serde(default)]
+    pub auto_focus_on_hover: Option<bool>,
+
     // these are intentionally excluded from the CLI options as they must be specified in the
     // configuration file
     pub web_server_ip: Option<IpAddr>,
@@ -315,6 +321,7 @@ impl Options {
         let show_startup_tips = other.show_startup_tips.or(self.show_startup_tips);
         let show_release_notes = other.show_release_notes.or(self.show_release_notes);
         let advanced_mouse_actions = other.advanced_mouse_actions.or(self.advanced_mouse_actions);
+        let auto_focus_on_hover = other.auto_focus_on_hover.or(self.auto_focus_on_hover);
         let web_server_ip = other.web_server_ip.or(self.web_server_ip);
         let web_server_port = other.web_server_port.or(self.web_server_port);
         let web_server_cert = other
@@ -362,6 +369,7 @@ impl Options {
             show_startup_tips,
             show_release_notes,
             advanced_mouse_actions,
+            auto_focus_on_hover,
             web_server_ip,
             web_server_port,
             web_server_cert,
@@ -432,6 +440,7 @@ impl Options {
         let show_startup_tips = other.show_startup_tips.or(self.show_startup_tips);
         let show_release_notes = other.show_release_notes.or(self.show_release_notes);
         let advanced_mouse_actions = other.advanced_mouse_actions.or(self.advanced_mouse_actions);
+        let auto_focus_on_hover = other.auto_focus_on_hover.or(self.auto_focus_on_hover);
         let web_server_ip = other.web_server_ip.or(self.web_server_ip);
         let web_server_port = other.web_server_port.or(self.web_server_port);
         let web_server_cert = other
@@ -479,6 +488,7 @@ impl Options {
             show_startup_tips,
             show_release_notes,
             advanced_mouse_actions,
+            auto_focus_on_hover,
             web_server_ip,
             web_server_port,
             web_server_cert,

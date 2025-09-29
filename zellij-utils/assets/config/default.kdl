@@ -506,6 +506,11 @@ load_plugins {
 //
 // advanced_mouse_actions false
 
+// Whether to automatically focus pane when hovering over it with mouse
+// Default: false
+//
+// auto_focus_on_hover true
+
 // A command to run (will be wrapped with sh -c and provided the RESURRECT_COMMAND env variable)
 // after Zellij attempts to discover a command inside a pane when resurrecting sessions, the STDOUT
 // of this command will be used instead of the discovered RESURRECT_COMMAND

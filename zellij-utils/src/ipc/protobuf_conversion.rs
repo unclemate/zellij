@@ -571,6 +571,7 @@ impl From<crate::input::options::Options>
             show_startup_tips: options.show_startup_tips,
             show_release_notes: options.show_release_notes,
             advanced_mouse_actions: options.advanced_mouse_actions,
+            auto_focus_on_hover: options.auto_focus_on_hover,
             web_server_ip: options.web_server_ip.map(|ip| ip.to_string()),
             web_server_port: options.web_server_port.map(|p| p as u32),
             web_server_cert: options
@@ -660,6 +661,7 @@ impl TryFrom<crate::client_server_contract::client_server_contract::Options>
             show_startup_tips: options.show_startup_tips,
             show_release_notes: options.show_release_notes,
             advanced_mouse_actions: options.advanced_mouse_actions,
+            auto_focus_on_hover: options.auto_focus_on_hover,
             web_server_ip: options
                 .web_server_ip
                 .map(|ip| ip.parse())

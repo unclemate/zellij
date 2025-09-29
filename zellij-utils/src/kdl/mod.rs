@@ -2455,6 +2455,9 @@ impl Options {
         let advanced_mouse_actions =
             kdl_property_first_arg_as_bool_or_error!(kdl_options, "advanced_mouse_actions")
                 .map(|(v, _)| v);
+        let auto_focus_on_hover =
+            kdl_property_first_arg_as_bool_or_error!(kdl_options, "auto_focus_on_hover")
+                .map(|(v, _)| v);
         let web_server_ip =
             match kdl_property_first_arg_as_string_or_error!(kdl_options, "web_server_ip") {
                 Some((string, entry)) => Some(IpAddr::from_str(string).map_err(|_| {
@@ -2515,6 +2518,7 @@ impl Options {
             show_startup_tips,
             show_release_notes,
             advanced_mouse_actions,
+            auto_focus_on_hover,
             web_server_ip,
             web_server_port,
             web_server_cert,
